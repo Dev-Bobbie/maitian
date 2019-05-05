@@ -55,6 +55,8 @@ ROBOTSTXT_OBEY = False
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'maitian.middlewares.RandomUserAgentMiddlware':542,
+    'maitian.middlewares.ProxyMiddleware': 543,
+    'maitian.middlewares.DownloadRetryMiddleware': 544,
     #'maitian.middlewares.MaitianDownloaderMiddleware': 543,
 }
 
@@ -93,3 +95,24 @@ ITEM_PIPELINES = {
 
 MONGO_DB_URI = 'mongodb://192.168.33.11:27017/'
 SCRAPY_DATA = 'maitian'
+
+# 代理服务器
+PROXY_SERVER = "http://http-cla.abuyun.com:9030"
+# 代理服务器隧道验证信息
+PROXY_USER = "HSAM1367RL55808C"
+PROXY_PASS = "4AE087EF4788C11C"
+
+
+# 邮件相关设置
+MAIL_FROM = 'bobbie_liu88@163.com'
+MAIL_HOST = 'smtp.163.com'
+MAIL_PORT = 25
+MAIL_USER = 'bobbie_liu88@163.com'
+# 邮箱授权码
+MAIL_PASS = 'xxxx'
+
+# 邮件接收者列表
+RECEIVE_LIST = ['dev.bobbie@gmail.com']
+
+# 邮件主题
+SUBJECT = '爬虫状态报告'

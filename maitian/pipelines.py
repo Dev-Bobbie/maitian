@@ -4,6 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import logging
 
 import pymongo
 from scrapy import Item
@@ -26,5 +27,12 @@ class MongoDBPipeline(object):
     def process_item(self, item, spider):
         collection = self.db[spider.name]
         post = dict(item) if isinstance(item, Item) else item
-        collection.insert(post)
+        try:
+            collection.insert(post)
+            # 记录成功插入的数据总量
+            spider.crawler.stats.inc_value('Success_InsertedInto_MySqlDB')
+        except Exception as e:
+            logging.error("Failed Insert Into, Reason: {}".format(e.args))
+            # 记录插入失败的数据总量
+            spider.crawler.stats.inc_value('Failed_InsertInto_DB')
         return item
