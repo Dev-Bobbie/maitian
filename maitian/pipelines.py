@@ -155,6 +155,11 @@ class MysqlPipline(object):
         cursor.execute(insert_sql, params)
         # self.db.commit()   adbapi会自动提交数据的插入事实
 
+    def close_spider(self, spider):
+        """Discard the database pool on spider close"""
+        self.dbpool.close()
+
+
     @staticmethod
     def parse_mysql_url(mysql_url):
         """
