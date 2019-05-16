@@ -28,7 +28,7 @@ ROBOTSTXT_OBEY = False
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -70,6 +70,9 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'maitian.pipelines.MongoDBPipeline': 300,
+    'maitian.pipelines.RedisPipeline': 301,
+    # 'maitian.pipelines.MysqlPipline': 302,
+
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -93,26 +96,36 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MONGO_DB_URI = 'mongodb://192.168.33.11:27017/'
-SCRAPY_DATA = 'maitian'
+
+MONGOHOST  = "192.168.33.11"
+MONGOPORT = 27017
+DB = "maitian"
+COLLECTION = 'items'
 
 # 代理服务器
-PROXY_SERVER = "http://http-cla.abuyun.com:9030"
-# 代理服务器隧道验证信息
-PROXY_USER = "HSAM1367RL55808C"
-PROXY_PASS = "4AE087EF4788C11C"
+#PROXY_SERVER = "http://http-cla.abuyun.com:9030"
+PROXY_SERVER = "http://111.206.6.101:80"
+COMMANDS_MODULE = 'maitian.monitor'
+
+## 代理服务器隧道验证信息
+# PROXY_USER = "HSAM1367RL55808C"
+# PROXY_PASS = "4AE087EF4788C11C"
+
+MYSQL_PIPELINE_URL = 'mysql://root:mysql@192.168.33.11/test'
+REDIS_PIPELINE_URL = 'redis://192.168.33.11:6379'
+RETRY_HTTP_CODES = [500, 502, 503, 504, 522, 524, 408, 400]
 
 
-# 邮件相关设置
-MAIL_FROM = 'bobbie_liu88@163.com'
-MAIL_HOST = 'smtp.163.com'
-MAIL_PORT = 25
-MAIL_USER = 'bobbie_liu88@163.com'
-# 邮箱授权码
-MAIL_PASS = 'xxxx'
+DEPLOY_PROJECT = False
 
-# 邮件接收者列表
-RECEIVE_LIST = ['dev.bobbie@gmail.com']
-
-# 邮件主题
-SUBJECT = '爬虫状态报告'
+if DEPLOY_PROJECT:
+    # scrapy-redis 增量爬虫配置
+    # 1. 设置请求调度器采用 scrapy-redis 实现方案
+    SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+    # 2. 设置过滤类，实现去重功能
+    DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+    # 3. 配置redis
+    REDIS_HOST = '192.168.33.11'
+    REDIS_PORT = 6379
+    # 4. 设置持久化，当程序结束时是否清空 SCHEDULER_PERSIST 默认 False,如果程序结束自动清空
+    SCHEDULER_PERSIST = True
