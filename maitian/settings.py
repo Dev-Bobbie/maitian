@@ -98,13 +98,13 @@ ITEM_PIPELINES = {
 
 
 MONGOHOST  = "192.168.33.11"
-MONGOPORT = 27017
+MONGOPORT = 27018
 DB = "maitian"
 COLLECTION = 'items'
 
 # 代理服务器
 #PROXY_SERVER = "http://http-cla.abuyun.com:9030"
-PROXY_SERVER = "http://111.206.6.101:80"
+PROXY_SERVER = "http://47.89.13.67:80"
 COMMANDS_MODULE = 'maitian.monitor'
 
 ## 代理服务器隧道验证信息

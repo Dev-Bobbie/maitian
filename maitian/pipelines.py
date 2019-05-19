@@ -47,8 +47,8 @@ class MongoDBPipeline(object):
 
     @defer.inlineCallbacks
     def process_item(self, item, spider):
-        post = dict(item) if isinstance(item, Item) else item
-        result = yield self.col_instance.update_one(
+        item = dict(item) if isinstance(item, Item) else item
+        yield self.col_instance.update_one(
             {'title': item.get("title"),
              'price': item.get("price")},
             {'$set': item},
@@ -80,7 +80,7 @@ class RedisPipeline(object):
     def process_item(self, item, spider):
         logger = spider.logger
         try:
-            yield self.connection.set(item['title'], json.dumps(item))
+            yield self.connection.lpush("maitian", json.dumps(item,ensure_ascii=False))
 
         except txredisapi.ConnectionError:
             if self.report_connection_error:
