@@ -1,7 +1,7 @@
 txredisapi==1.4.4
 dj_database_url==0.5.0
 SQLAlchemy==1.3.3
-Twisted==19.2.0
+Twisted==22.1.0
 txmongo==19.1.0
 SQLAlchemy_Utils==0.33.11
 Scrapy==1.6.0
